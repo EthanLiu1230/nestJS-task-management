@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { Task } from './task.model';
 import { CreateTaskDto } from './dto/create-task.dto';
@@ -13,11 +13,15 @@ export class TasksController {
     // nest.js will do jsonify etc. to translate it into http-response
   }
 
+  @Get('/:id')
+  getTaskById(@Param('id') id: string): Task {
+    return this.tasksService.getTaskById(id);
+  }
+
   // @Post()
   // createTask(@Body() body) {
   //   console.log('body', body);
   // }
-
   // @Body('key') will parse request.body, extract value from json by key,
   // and convert according to type hint
   @Post()
