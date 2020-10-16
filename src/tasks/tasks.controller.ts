@@ -5,7 +5,7 @@ import {
   Get,
   Param,
   Patch,
-  Post, Query,
+  Post, Query, UsePipes, ValidationPipe,
 } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { Task, TaskStatus } from './task.model';
@@ -23,6 +23,7 @@ export class TasksController {
   // @Body('key') will parse request.body, extract value from json by key,
   // and convert according to type hint
   @Post()
+  @UsePipes(ValidationPipe) // nestJs is smart enough to validate the Dto with Dto's decorator
   createTask(@Body() createTaskDto: CreateTaskDto): Task {
     return this.tasksService.createTask(createTaskDto);
   }
