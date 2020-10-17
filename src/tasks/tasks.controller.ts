@@ -30,7 +30,7 @@ export class TasksController {
   }
 
   @Get()
-  getTasks(@Query() filterDto: GetTasksFilterDto): Task[] {
+  getTasks(@Query(ValidationPipe) filterDto: GetTasksFilterDto): Task[] {
     // @Query parse '?status=OPEN&search=NestJS' in url into object
     // and assign to the var it decorated
 
