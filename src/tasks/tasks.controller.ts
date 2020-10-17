@@ -5,9 +5,10 @@ import {
   Get,
   Param,
   Patch,
-  Post, Query, UsePipes, ValidationPipe,
+  Post, Query, UsePipes, ValidationPipe, ParseIntPipe,
 } from '@nestjs/common';
 import { TaskStatusValidationPipe } from './pipes/task-status-validation.pipe';
+import { Task } from './task.entity';
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
@@ -40,10 +41,11 @@ export class TasksController {
   //   // nest.js will do jsonify etc. to translate it into http-response
   // }
   //
-  // @Get('/:id') // or ':id', they both work
-  // getTaskById(@Param('id') id: string): Task {
-  //   return this.tasksService.getTaskById(id);
-  // }
+  @Get('/:id') // or ':id', they both work
+  getTaskById(@Param('id', ParseIntPipe) id: number): Promise<Task> {
+    return this.tasksService.getTaskById(id);
+  }
+
   //
   // @Patch('/:id/status')
   // updateTaskStatus(
