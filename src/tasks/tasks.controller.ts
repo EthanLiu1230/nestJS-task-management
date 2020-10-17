@@ -18,10 +18,6 @@ import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
 export class TasksController {
   constructor(private tasksService: TasksService) {}
 
-  // @Post()
-  // createTask(@Body() body) {
-  //   console.log('body', body);
-  // }
   // @Body('key') will parse request.body, extract value from json by key,
   // and convert according to type hint
   @Post()
@@ -30,26 +26,19 @@ export class TasksController {
     return this.tasksService.createTask(createTaskDto);
   }
 
-  //
-  // @Get()
-  // getTasks(@Query(ValidationPipe) filterDto: GetTasksFilterDto): Task[] {
-  //   // @Query parse '?status=OPEN&search=NestJS' in url into object
-  //   // and assign to the var it decorated
-  //
-  //   if (Object.keys(filterDto).length) {
-  //     return this.tasksService.getTasksWithFilters(filterDto);
-  //   }
-  //   return this.tasksService.getAllTasks();
-  //   // nest.js will do jsonify etc. to translate it into http-response
-  // }
-  //
+  @Get()
+  getTasks(
+    @Query(ValidationPipe) filterDto: GetTasksFilterDto): Promise<Task[]> {
+    return this.tasksService.getTasks(filterDto);
+  }
+
   @Get('/:id') // or ':id', they both work
   getTaskById(@Param('id', ParseIntPipe) id: number): Promise<Task> {
     return this.tasksService.getTaskById(id);
   }
 
   @Patch('/:id/status')
-  async updateTaskStatus(
+  updateTaskStatus(
     @Param('id', ParseIntPipe) id: number,
     @Body('status', TaskStatusValidationPipe) status: TaskStatus,
   ): Promise<Task> {
