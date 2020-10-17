@@ -23,11 +23,12 @@ export class TasksController {
   // }
   // @Body('key') will parse request.body, extract value from json by key,
   // and convert according to type hint
-  // @Post()
-  // @UsePipes(ValidationPipe) // nestJs is smart enough to validate the Dto with Dto's decorator
-  // createTask(@Body() createTaskDto: CreateTaskDto): Task {
-  //   return this.tasksService.createTask(createTaskDto);
-  // }
+  @Post()
+  @UsePipes(ValidationPipe) // nestJs is smart enough to validate the Dto with Dto's decorator
+  createTask(@Body() createTaskDto: CreateTaskDto): Promise<Task> {
+    return this.tasksService.createTask(createTaskDto);
+  }
+
   //
   // @Get()
   // getTasks(@Query(ValidationPipe) filterDto: GetTasksFilterDto): Task[] {
