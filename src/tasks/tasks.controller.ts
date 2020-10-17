@@ -9,7 +9,6 @@ import {
 } from '@nestjs/common';
 import { TaskStatusValidationPipe } from './pipes/task-status-validation.pipe';
 import { TasksService } from './tasks.service';
-import { Task, TaskStatus } from './task.model';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
 
@@ -23,40 +22,40 @@ export class TasksController {
   // }
   // @Body('key') will parse request.body, extract value from json by key,
   // and convert according to type hint
-  @Post()
-  @UsePipes(ValidationPipe) // nestJs is smart enough to validate the Dto with Dto's decorator
-  createTask(@Body() createTaskDto: CreateTaskDto): Task {
-    return this.tasksService.createTask(createTaskDto);
-  }
-
-  @Get()
-  getTasks(@Query(ValidationPipe) filterDto: GetTasksFilterDto): Task[] {
-    // @Query parse '?status=OPEN&search=NestJS' in url into object
-    // and assign to the var it decorated
-
-    if (Object.keys(filterDto).length) {
-      return this.tasksService.getTasksWithFilters(filterDto);
-    }
-    return this.tasksService.getAllTasks();
-    // nest.js will do jsonify etc. to translate it into http-response
-  }
-
-  @Get('/:id') // or ':id', they both work
-  getTaskById(@Param('id') id: string): Task {
-    return this.tasksService.getTaskById(id);
-  }
-
-  @Patch('/:id/status')
-  updateTaskStatus(
-    @Param('id') id: string,
-    @Body('status', TaskStatusValidationPipe) status: TaskStatus,
-  ): Task {
-    return this.tasksService.updateTaskStatus(id, status);
-  }
-
-  @Delete('/:id')
-  deleteTask(@Param('id') id: string): void {
-    this.tasksService.deleteTask(id);
-  }
+  // @Post()
+  // @UsePipes(ValidationPipe) // nestJs is smart enough to validate the Dto with Dto's decorator
+  // createTask(@Body() createTaskDto: CreateTaskDto): Task {
+  //   return this.tasksService.createTask(createTaskDto);
+  // }
+  //
+  // @Get()
+  // getTasks(@Query(ValidationPipe) filterDto: GetTasksFilterDto): Task[] {
+  //   // @Query parse '?status=OPEN&search=NestJS' in url into object
+  //   // and assign to the var it decorated
+  //
+  //   if (Object.keys(filterDto).length) {
+  //     return this.tasksService.getTasksWithFilters(filterDto);
+  //   }
+  //   return this.tasksService.getAllTasks();
+  //   // nest.js will do jsonify etc. to translate it into http-response
+  // }
+  //
+  // @Get('/:id') // or ':id', they both work
+  // getTaskById(@Param('id') id: string): Task {
+  //   return this.tasksService.getTaskById(id);
+  // }
+  //
+  // @Patch('/:id/status')
+  // updateTaskStatus(
+  //   @Param('id') id: string,
+  //   @Body('status', TaskStatusValidationPipe) status: TaskStatus,
+  // ): Task {
+  //   return this.tasksService.updateTaskStatus(id, status);
+  // }
+  //
+  // @Delete('/:id')
+  // deleteTask(@Param('id') id: string): void {
+  //   this.tasksService.deleteTask(id);
+  // }
 
 }
