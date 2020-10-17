@@ -14,18 +14,7 @@ export class TasksService {
   ) {}
 
   async createTask(createTaskDto: CreateTaskDto): Promise<Task> {
-    const { description, title } = createTaskDto;
-
-    const task = new Task();
-    Object.assign(task, {
-      title, description,
-      status: TaskStatus.OPEN,
-    });
-
-    // task is an Entity Object, commit change to db
-    await task.save();
-
-    return task;
+    return this.tasksRepository.createTask(createTaskDto);
   }
 
   // private tasks: Task[] = [];
