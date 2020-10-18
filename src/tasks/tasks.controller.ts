@@ -8,6 +8,8 @@ import {
   Post, Query, UsePipes, ValidationPipe, ParseIntPipe, UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { GetUser } from '../auth/get-user.decorator';
+import { User } from '../auth/user.entity';
 import { TaskStatusValidationPipe } from './pipes/task-status-validation.pipe';
 import { TaskStatus } from './task-status.enum';
 import { Task } from './task.entity';
@@ -19,12 +21,15 @@ import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
 export class TasksController {
   constructor(private tasksService: TasksService) {}
 
-  // @Body('key') will parse request.body, extract value from json by key,
-  // and convert according to type hint
   @Post()
-  @UsePipes(ValidationPipe) // nestJs is smart enough to validate the Dto with Dto's decorator
-  createTask(@Body() createTaskDto: CreateTaskDto): Promise<Task> {
-    return this.tasksService.createTask(createTaskDto);
+  // nestJs is smart enough to validate the Dto with Dto's decorator
+  @UsePipes(ValidationPipe)
+  createTask(
+    // @Body('key') will parse request.body, extract value from json by key,
+    @Body() createTaskDto: CreateTaskDto,
+    @GetUser() user: User,
+  ): Promise<Task> {
+    return this.tasksService.createTask(createTaskDto, user);
   }
 
   @Get()
