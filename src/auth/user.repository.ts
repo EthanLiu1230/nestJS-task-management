@@ -9,7 +9,7 @@ import { genSalt, hash } from 'bcrypt';
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
-  async signUp(authCredentialsDto: AuthCredentialsDto) {
+  async signUp(authCredentialsDto: AuthCredentialsDto): Promise<void> {
     const { username, password } = authCredentialsDto;
 
     const salt = await genSalt();
@@ -17,7 +17,7 @@ export class UserRepository extends Repository<User> {
     Object.assign(user, {
       salt,
       username,
-      password: await UserRepository.hashPassword(password, salt),
+      password: await hash(password, salt),
     });
 
     try { await user.save();} catch (error) {
@@ -29,8 +29,14 @@ export class UserRepository extends Repository<User> {
     }
   }
 
-  private static async hashPassword(
-    password: string, salt: string): Promise<string> {
-    return hash(password, salt);
+  async validateUserPassword(authCredentialsDto: AuthCredentialsDto): Promise<string> {
+    const { username, password } = authCredentialsDto;
+    const user = await this.findOne({ username });
+
+    if (user && await user.validatePassword(password)) {
+      return user.username;
+    } else {
+      return null;
+    }
   }
 }
